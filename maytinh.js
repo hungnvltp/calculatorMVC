@@ -1,4 +1,3 @@
-
 class Model {
     constructor() {
         this.currNumber = '';
@@ -7,6 +6,8 @@ class Model {
         this.dotAllow = true;
         this.isEqual = false;
         this.displayBoxId = '';
+
+
     }
     numberModel(numberButton, displayBoxId) {
         if (this.displayBoxId != displayBoxId && this.displayBoxId != '') {
@@ -22,6 +23,7 @@ class Model {
             this.dotAllow = false;
         }
         this.currNumber = this.currNumber + numberButton;
+
     }
     operationModel(operationButton, displayBoxId) {
         if (this.displayBoxId != displayBoxId && this.displayBoxId != '') {
@@ -33,18 +35,18 @@ class Model {
             this.isEqual = false;
         }
         this.displayBoxId = displayBoxId;
-        this.operationButton = operationButton;
+        //this.operationButton = operationButton;
         if (!this.currNumber) return;
         this.dotAllow = true;
         if ((this.preNumber || this.preNumber === 0) && ((operationButton && !this.isEqual) || (this.isEqual))) {
             this.onSave();
-        }
 
+        }
         if (operationButton) this.operation = operationButton;
         this.preNumber = this.currNumber;
 
         if (!this.isEqual) this.currNumber = '';
-        this.onShow();
+        this.onSum();
         this.callbackFromController(this.res)
     };
     onSave() {
@@ -68,12 +70,11 @@ class Model {
                 break;
         }
         this.currNumber = this.res;
-
         this.operation = '';
         this.preNumber = '';
         this.res = '';
     }
-    onShow() {
+    onSum() {
         this.res = this.currNumber + this.operation;
         if (this.operation && (this.preNumber || this.preNumber === 0)) this.res = this.preNumber + this.operation + this.currNumber;
     }
@@ -100,7 +101,6 @@ class Model {
         }
         this.displayBoxId = displayBoxId;
         this.isEqual = true;
-
         this.operationModel(null, displayBoxId);
         this.preNumber = '';
         this.isEqual = false;
@@ -160,18 +160,19 @@ class View {
          </form>`
         this.root.appendChild(this.formCalculator);
     };
-    addNumber(data,) {
+    addNumber(data) {
         var numberButtons = document.getElementsByClassName("dataNumber");
         Array.from(numberButtons).forEach(function (numberButton) {
             numberButton.addEventListener('click', function () {
                 var displayContent = numberButton.parentNode.parentNode.parentNode.getElementsByTagName('input')[0];
                 this.displayBox = displayContent.id;
                 if (data(numberButton.value, currNumber, this.displayBox) !== false) {
-
                     var currNumber = displayContent.value;
+
                     if (currNumber == 0) currNumber = '';
                     var newValue = currNumber + numberButton.value;
                     displayContent.value = newValue;
+                    console.log(numberButton.value)
                 }
             });
         });
@@ -186,7 +187,7 @@ class View {
             })
         })
     }//thêm
-    renderListTodo(newValue, i) {
+    renderListTodo(newValue, ) {
         document.getElementById(this.displayBox).value = newValue; // lấy từ thuộc
     }
     deleteData(handler) {
